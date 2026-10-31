@@ -1,143 +1,141 @@
-# 🧠 Mini GPT Studio — Built from Scratch
+# Mini GPT Studio 🪻
 
-A miniature GPT-style language model built using **PyTorch**, trained from scratch on text data, and integrated into an interactive **Streamlit web application**.
+A small, word-level GPT-style language model built from scratch with PyTorch and deployed as a Streamlit app. This project was created to learn how the core pieces of a GPT model fit together—from tokenization and embeddings to causal self-attention, a Transformer block, training, and text generation.
 
-This project explores the fundamentals of Generative AI, Transformer architecture, autoregressive text generation, and model deployment.
+> This is an educational mini-model, not a production LLM. Its generations can be repetitive or grammatically inconsistent, which is expected for a small model trained on a single book.
 
-## ✨ Features
+## ✨ Try it
 
-- **Text generation:** Enter a prompt and generate text using your trained GPT model.
-- **Adjustable generation length:** Control the number of new tokens generated.
-- **Temperature control:** Experiment with more focused or more random outputs.
-- **Interactive interface:** Clean, dark-themed Streamlit application.
-- **Example prompts:** Quickly test the model with sample inputs.
-- **Local inference:** Run the model on your CPU without requiring a GPU.
+- **Live app:** `ADD_YOUR_STREAMLIT_APP_URL_HERE`
+- **Training notebook (Google Colab):** [Building a Mini LLM](https://colab.research.google.com/drive/1qaIPzr-TgYZ85TW68OsYExLi3N9eB0ly?authuser=2#scrollTo=lXPpEm7pkJ0r)
+- **GitHub repository:** `ADD_YOUR_GITHUB_REPOSITORY_URL_HERE`
 
+## 📚 Dataset
 
+The model was trained on *The Child's Book of Nature* by **Worthington Hooker**, using the book's Part I section on plants as represented in the training text.
 
-## 🔗 Links
+- **Original source:** [Project Gutenberg — The Child's Book of Nature](https://www.gutenberg.org/ebooks/58421)
+- **Preprocessing:** text converted to lowercase; punctuation and characters outside `a-z`, `0-9`, and whitespace removed; text split on whitespace.
+- **Training tokens:** 132,681 word tokens
+- **Vocabulary size:** 5,308 unique words
+- **Data split:** 90% training / 10% validation (119,412 training tokens and 13,269 validation tokens)
 
-- 🚀 **Live Demo:** [Try Mini GPT Studio](https://mini-gpt-studio-madebybillubadmosh.streamlit.app/)
-- 📓 **Training Notebook:** [View the Google Colab Notebook](https://colab.research.google.com/drive/1qaIPzr-TgYZ85TW68OsYExLi3N9eB0ly?authuser=2#scrollTo=lXPpEm7pkJ0r)
-- 💻 **Source Code:** [View Repository](https://github.com/siddharthbyte/mini-gpt-studio)
+The model uses **word-level tokenization**: each unique word is assigned an integer ID. This keeps the implementation approachable, but means a prompt containing words outside the learned vocabulary cannot be represented.
 
-## 🏗️ Model Architecture
+## 🧠 Model architecture
 
-The model implements a simplified GPT-style architecture with:
+| Component | Configuration |
+|---|---|
+| Model type | Small GPT-style causal language model |
+| Tokenization | Word-level |
+| Vocabulary size | 5,308 |
+| Token embedding dimension | 32 |
+| Positional embedding dimension | 32 |
+| Context length (`block_size`) | 64 tokens |
+| Transformer blocks | 1 |
+| Causal self-attention heads | 1 |
+| Attention head size | 32 |
+| Feed-forward network | 32 → 128 → 32, with ReLU |
+| Normalization | LayerNorm |
+| Output layer | Linear projection to 5,308 vocabulary logits |
+| Trainable parameters | **358,684** |
+| Batch size | 32 |
+| Optimizer | AdamW |
+| Learning rate | 0.0003 |
+| Training iterations | 10,000 total |
+| Training hardware | Google Colab NVIDIA Tesla T4 GPU |
 
-- Token embeddings
-- Positional embeddings
-- Causal self-attention
-- Feed-forward neural network
-- Layer normalization
-- Residual connections
-- Linear language-model output head
+### How generation works
 
-The model predicts the next word based on the preceding context, making it an **autoregressive language model**.
+1. The prompt is lowercased and split into words.
+2. Known words are converted to token IDs.
+3. The model predicts next-word logits from the current context.
+4. Temperature scales the logits before softmax sampling.
+5. The sampled word is appended to the context and the process repeats, up to the configured generation length.
 
-## 🛠️ Tech Stack
+The context is limited to 64 tokens at a time. The Streamlit interface lets you enter a prompt, adjust creativity/temperature, and choose how many new tokens to generate.
+
+## 📉 Training notes
+
+Training was performed in two consecutive loops: 2,000 iterations followed by another 8,000 iterations. The notebook logs training and validation loss periodically.
+
+At the final logged evaluation point (step 9,500):
+- Training loss: **4.2923**
+- Validation loss: **5.4997**
+
+The notebook does not record total wall-clock training duration. Validation loss stopped improving consistently while training loss continued to decrease, so the model shows signs of overfitting to the training text.
+
+## 🛠️ Tech stack
 
 - Python
 - PyTorch
 - Streamlit
-- NumPy
-- Git and GitHub
+- Google Colab
 
-## 📁 Project Structure
+## 🚀 Run locally
 
-```text
-MiniLLM/
-├── app.py                 # Streamlit web application
-├── model.py               # GPT model architecture
-├── test_model.py          # Model loading and generation test
-├── requirements.txt       # Python dependencies
-├── README.md              # Project documentation
-├── models/
-│   └── gpt_model.pth      # Trained model checkpoint
-└── .gitignore
-```
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
+Clone the repository and enter the project directory:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/mini-gpt-studio.git
-cd mini-gpt-studio
+git clone ADD_YOUR_GITHUB_REPOSITORY_URL_HERE
+cd MiniLLM
 ```
 
-Replace `YOUR_USERNAME` with your GitHub username.
-
-### 2. Create a virtual environment
+Create and activate a virtual environment (optional but recommended), then install dependencies:
 
 ```bash
 python -m venv .venv
 ```
 
-Activate it on Windows PowerShell:
+Windows PowerShell:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+Install the requirements and start Streamlit:
 
 ```bash
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
+streamlit run app.py
 ```
 
-### 4. Run the application
+The app expects the trained checkpoint at `models/gpt_model.pth` and the model architecture in `model.py`. Keep those files in the locations expected by the app.
 
-```bash
-python -m streamlit run app.py
+## 📁 Project structure
+
+```text
+MiniLLM/
+├── app.py
+├── model.py
+├── test_model.py
+├── requirements.txt
+├── README.md
+└── models/
+    └── gpt_model.pth
 ```
 
-Streamlit will provide a local URL, usually `http://localhost:8501`.
+## 🙌 Acknowledgements
 
-## 💬 How to Use
+This project was built as a learning exercise and was inspired by **Andrej Karpathy's** educational lecture:
 
-1. Open the application in your browser.
-2. Enter a starting phrase in the prompt box.
-3. Adjust the generation length and temperature in the sidebar.
-4. Click **Generate text** to produce a continuation.
-5. Try another prompt or use **Clear** to start again.
+- [Let's build GPT: from scratch, in code, spelled out.](https://www.youtube.com/watch?v=kCc8FmEb1nY)
 
-Example prompts:
-
-- `the sun`
-- `once upon a time`
-- `in a great many`
-- `the animals`
+The project uses its own small word-level implementation and training corpus; it is not a reproduction of a production-scale GPT model.
 
 ## ⚠️ Limitations
 
-This is a small experimental language model, not a production-scale LLM.
+- Very small model with only 358,684 trainable parameters.
+- Trained on one book, so its vocabulary and style are narrow.
+- Word-level tokenization cannot handle unseen words.
+- Context length is limited to 64 tokens.
+- Outputs are sampled predictions, not verified facts; expect occasional repetition and incoherence.
+- Not suitable for factual, professional, or safety-critical use.
 
-- Generated text may be repetitive, grammatically incorrect, or incoherent.
-- The model has a limited vocabulary and can only use words learned during training.
-- Its knowledge and writing style are constrained by its training corpus.
-- Inference runs on the CPU by default, so generation speed depends on the machine.
+## 📄 Dataset rights
 
-These limitations are expected for a small model trained for educational purposes.
+The linked Project Gutenberg edition identifies the book as public domain in the United States. Please check the applicable terms and copyright status for your own jurisdiction before redistributing the source text.
 
-## 🎯 Learning Objectives
-
-This project helped explore:
-
-- How tokenization and vocabulary mappings work
-- How causal self-attention processes context
-- How Transformer blocks are constructed
-- How next-token prediction enables text generation
-- How to save and reload a trained PyTorch model
-- How to build a user interface around a machine-learning model
-
-## 🔮 Future Improvements
-
-- Improve training and generation quality
-- Add model evaluation and training-loss visualizations
-- Experiment with larger datasets and model architectures
-- Deploy the application online
-- Explore subword tokenization and more advanced sampling methods
 
 ## 👨‍💻 Author
 
