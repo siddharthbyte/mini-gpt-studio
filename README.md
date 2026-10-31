@@ -6,9 +6,9 @@ A small, word-level GPT-style language model built from scratch with PyTorch and
 
 ## ✨ Try it
 
-- **Live app:** `https://mini-gpt-studio-madebybillubadmosh.streamlit.app/`
+- **Live app:** [LINK](`https://mini-gpt-studio-madebybillubadmosh.streamlit.app/`)
 - **Training notebook (Google Colab):** [Building a Mini LLM](https://colab.research.google.com/drive/1qaIPzr-TgYZ85TW68OsYExLi3N9eB0ly?authuser=2#scrollTo=lXPpEm7pkJ0r)
-- **GitHub repository:** `https://github.com/siddharthbyte/mini-gpt-studio`
+- **GitHub repository:** [LINK](`https://github.com/siddharthbyte/mini-gpt-studio`)
 
 ## 📚 Dataset
 
