@@ -13,6 +13,14 @@ This project explores the fundamentals of Generative AI, Transformer architectur
 - **Example prompts:** Quickly test the model with sample inputs.
 - **Local inference:** Run the model on your CPU without requiring a GPU.
 
+
+
+## 🔗 Links
+
+- 🚀 **Live Demo:** [Try Mini GPT Studio](https://mini-gpt-studio-madebybillubadmosh.streamlit.app/)
+- 📓 **Training Notebook:** [View the Google Colab Notebook](https://colab.research.google.com/drive/1qaIPzr-TgYZ85TW68OsYExLi3N9eB0ly?authuser=2#scrollTo=lXPpEm7pkJ0r)
+- 💻 **Source Code:** [View Repository](https://github.com/siddharthbyte/mini-gpt-studio)
+
 ## 🏗️ Model Architecture
 
 The model implements a simplified GPT-style architecture with:
